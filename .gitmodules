@@ -1,0 +1,6 @@
+[submodule "messenger_app"]
+	path = messenger_app
+	url = https://github.com/will-da-pro/messenger_app
+[submodule "messenger_backend"]
+	path = messenger_backend
+	url = https://github.com/will-da-pro/messenger_backend
