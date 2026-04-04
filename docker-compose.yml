@@ -7,9 +7,8 @@ services:
       - ./messenger_backend:/app
     expose:
       - "8000"
-    environment:
-      DEBUG: "True"
-      DB_NAME: django_db
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   frontend:
     build:
