@@ -1,18 +1,8 @@
 services:
-  db:
-    image: postgres:16-alpine
-    restart: unless-stopped
-    environment:
-      POSTGRES_DB: django_db
-      POSTGRES_USER: django_user
-      POSTGRES_PASSWORD: django_pass
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
   backend:
     build: ./messenger_backend/
     restart: unless-stopped
-    command: sh -c "ls -la && python manage.py migrate --noinput && python manage.py runserver 0.0.0.0:8000"
+    command: sh -c "ls -la && python manage.py migrate --noinput && daphne -b 0.0.0.0 -p 8000 messenger_backend.asgi:application"
     volumes:
       - ./messenger_backend:/app
     expose:
@@ -20,12 +10,6 @@ services:
     environment:
       DEBUG: "True"
       DB_NAME: django_db
-      DB_USER: django_user
-      DB_PASSWORD: django_pass
-      DB_HOST: db
-      DB_PORT: 5432
-    depends_on:
-      - db
 
   frontend:
     build:
@@ -36,6 +20,3 @@ services:
       - "80:80" # Main port for the app
     depends_on:
       - backend
-
-volumes:
-  postgres_data:
