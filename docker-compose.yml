@@ -5,6 +5,7 @@ services:
     command: sh -c "ls -la && python manage.py migrate --noinput && daphne -b 0.0.0.0 -p 8000 messenger_backend.asgi:application"
     volumes:
       - ./messenger_backend:/app
+      - django_static:/app/static
     expose:
       - "8000"
     extra_hosts:
@@ -15,7 +16,12 @@ services:
       context: ./messenger_app/
       target: production # Use the production stage
     restart: unless-stopped
+    volumes:
+      - django_static:/usr/share/nginx/html/static
     ports:
       - "80:80" # Main port for the app
     depends_on:
       - backend
+
+volumes:
+  django_static:
